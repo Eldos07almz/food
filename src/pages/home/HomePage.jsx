@@ -86,6 +86,8 @@ const HomePage = () => {
                 id={key}
                 fontWeight="700"
                 variant="h5"
+                textAlign="start"
+                sx={{ paddingTop: "60px", marginTop: "-60px" }}
               >
                 {key}
               </Typography>
