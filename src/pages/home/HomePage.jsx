@@ -1,10 +1,16 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 import PocketBase from "pocketbase";
 import { useEffect, useState } from "react";
 import Productcard from "./productcard";
 
 const HomePage = () => {
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(true);
   const [foods, setFoods] = useState([]);
   const pb = new PocketBase("https://restaurant-menu.fly.dev");
 
@@ -26,7 +32,6 @@ const HomePage = () => {
 
       setFoods(groupedItems);
       setLoading(false);
-      console.log(groupedItems);
     } catch (e) {
       console.log(e);
     }
@@ -37,7 +42,7 @@ const HomePage = () => {
   return (
     <Container sx={{ paddingTop: 5 }}>
       {loading ? (
-        <h1>Loading...</h1>
+        <CircularProgress color="inherit" />
       ) : (
         Object.keys(foods).map((key) => (
           <Box key={key}>
