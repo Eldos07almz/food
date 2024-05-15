@@ -25,7 +25,7 @@ const HomePage = () => {
     }
   };
 
-  const getBooks = async () => {
+  const getFoods = async () => {
     try {
       const resultList = await pb.collection("Batman_products").getList(1, 50, {
         $autoCancel: false,
@@ -48,7 +48,7 @@ const HomePage = () => {
     }
   };
   useEffect(() => {
-    getBooks();
+    getFoods();
   }, []);
   return (
     <Container sx={{ paddingTop: 5 }}>
