@@ -4,15 +4,26 @@ import {
   Grid,
   Typography,
   CircularProgress,
+  Tabs,
+  Chip,
 } from "@mui/material";
 import PocketBase from "pocketbase";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Productcard from "./productcard";
 
 const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [foods, setFoods] = useState([]);
   const pb = new PocketBase("https://restaurant-menu.fly.dev");
+
+  const scrollRef = useRef(null);
+
+  const handleChipClick = (categoryName) => {
+    const categoryElement = document.getElementById(categoryName);
+    if (categoryElement) {
+      categoryElement.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const getBooks = async () => {
     try {
@@ -44,23 +55,53 @@ const HomePage = () => {
       {loading ? (
         <CircularProgress color="inherit" />
       ) : (
-        Object.keys(foods).map((key) => (
-          <Box key={key}>
-            <Typography fontWeight="700" variant="h5">
-              {key}
-            </Typography>
-            <Grid container spacing={2}>
-              {foods[key]?.map((item) => (
-                <Grid key={item.id} item xs={6} sm={6} md={4} lg={3}>
-                  <Productcard
-                    {...item}
-                    img={`https://restaurant-menu.fly.dev/api/files/batman_products/${item.id}/${item.images[0]}`}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
-        ))
+        <Box>
+          <Tabs
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
+            sx={{
+              width: { xs: 360, sm: 600, md: 1200 },
+              paddingTop: "10px",
+              position: "sticky",
+              top: 0,
+              zIndex: 1,
+              backgroundColor: "white",
+            }}
+          >
+            {Object.keys(foods).map((k) => (
+              <Chip
+                sx={{ marginRight: "4px" }}
+                key={k}
+                label={k}
+                onClick={() => handleChipClick(k)}
+              />
+            ))}
+          </Tabs>
+
+          {Object.keys(foods).map((key) => (
+            <Box key={key}>
+              <Typography
+                ref={scrollRef}
+                id={key}
+                fontWeight="700"
+                variant="h5"
+              >
+                {key}
+              </Typography>
+              <Grid container spacing={2}>
+                {foods[key]?.map((item) => (
+                  <Grid key={item.id} item xs={6} sm={6} md={4} lg={3}>
+                    <Productcard
+                      {...item}
+                      img={`https://restaurant-menu.fly.dev/api/files/batman_products/${item.id}/${item.images[0]}`}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
+          ))}
+        </Box>
       )}
     </Container>
   );
